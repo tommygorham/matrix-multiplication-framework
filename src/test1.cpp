@@ -1,6 +1,10 @@
 #include <iostream>
 #include "dense-matrix.h"
 #include "matrix-mult.h"
+#include <chrono> 
+#include "timer.h" 
+#include <typeinfo> 
+#include "readtype.h" 
 
 using namespace std;
 
@@ -11,72 +15,78 @@ void print_dense_Matrix(const dense_Matrix<T> &A)
   {
     for (int j = 0; j < A.Cols(); ++j)
     {
-      std::cout << A(i, j) << " ";
+      cout << A(i, j) << " ";
     }
-    std::cout << ("\n");
+    cout << ("\n");
   }
-  std::cout << ("\n"); // white space
+  cout << ("\n"); // white space
 }
+
 template <typename T> 
-void init_dense_Matrix_const(dense_Matrix<T> &A, const T& c)
+void init_dense_Matrix_const(dense_Matrix<T> &DM, const T& c)
 {
-  for (int i = 0; i < A.Rows(); ++i)
+  for (int i = 0; i < DM.Rows(); ++i)
   {
-    for (int j = 0; j < A.Cols(); ++j)
+    for (int j = 0; j < DM.Cols(); ++j)
     {
-      A(i, j) = c;
-      std::cout << A(i, j) << " ";
+      DM(i, j) = c;
     }
-    std::cout << ("\n");
   }
-  std::cout << ("\n"); // white space
+}
+
+
+template <typename T> 
+void init_dense_Matrix_diag(dense_Matrix<T> &DM, const T& c)
+{
+  for (int i = 0; i < DM.Rows(); ++i)
+  {
+    for (int j = 0; j < DM.Cols(); ++j)
+    {
+	    if(i == j)
+           DM(i, j) = 4.0;
+        else
+	       DM(i, j) = 0.;
+    }
+  }
 }
 
 int main(int argc, char **argv)
 {
-  dense_Matrix<double> A(100, 100), B(100, 100), C(100, 100);
-  dense_Matrix<double> AA(A.Rows(),A.Cols());
+  constexpr int M = 100;
+  constexpr int N = 100; 
+  dense_Matrix<double> A(M, N), B(M, N), C(M, N);
+  //dense_Matrix<double> AA(A.Rows(),A.Cols());
 
-  // fill in matrix A
-  std::cout << "Matrix A: " << ("\n"); // for readability 
+  // fill in matrix A, B 
   init_dense_Matrix_const(A, 2.0);
-  std::cout << ("\n"); // white space
-
-  // fill in matrix B
-  std::cout << "Matrix B: " << ("\n"); // for readability
-  for (int i = 0; i < B.Rows(); ++i)
-  {
-    for (int j = 0; j < B.Cols(); ++j)
-    {
-      if(i == j)
-         B(i, j) = 3;
-      else
-	 B(i, j) = 0.;
-
-      std::cout << B(i, j) << " ";
-    }
-    std::cout << ("\n");
+  init_dense_Matrix_diag(B, 4.0); 
+  
+  int code {};   
+  { 
+    TommysLib::Timer timer; 
+    code = matrix_Mult(C, A, B);
   }
 
-  int code = matrix_Mult(C, A, B);
-
-std::cout << "the return code was " << code << std::endl;
-//int code = matrix_Mult(C, A, Bprime);
-  // print C out (how?)
-std::cout << ("\n"); 
-std::cout << "Matrix C: " << ("\n"); // for readability
- for (int i = 0; i < C.Rows(); ++i)
+  cout << "the return code was " << code << endl;
+  
+  // print first few rows of C 
+  cout << "\nMatrix C: " << ("\n"); // for readability
+  for (int i = 0; i < 5; ++i)
   {
-    for (int j = 0; j < C.Cols(); ++j)
+    for (int j = 0; j < 5; ++j)
     {
-      std::cout << C(i,j) << " ";
+      cout << C(i,j) << " ";
     }
-    std::cout << ("\n");
+    cout << ("\n");
   }
+ 
+  cout << "\nsizeof(A): " <<  sizeof(A) << endl; 
+  cout << "\ntype(A): " <<  typeid(A).name() << endl; 
+  cout << "\nreadtype(A): " <<  type_name<decltype(A)>() << endl; 
+  cout << "\n&A: " <<  &A << endl;   
+  cout << "\n&A(0,0): " <<  &A(0,0) << endl; 
+  cout << "\n&A(1,0): " <<  &A(1,0) << endl; 
 
-  //
-  AA = A; // calls AA.operator=(A);
-
-  // delete D;
+  // AA = A; // calls AA.operator=(A);
   return 0;
 }
