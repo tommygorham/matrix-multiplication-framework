@@ -1,10 +1,13 @@
 # matrix-multiplication-framework
-Framework for building high-performance matrix-multiplication codes through object-oriented C++. Templated for any type, optimized for row-major order. 
+Framework for building high-performance matrix-multiplication codes with C++. 
 
-
---- TO RUN ---
-
-cd src
-make clean
+--- TO RUN WITH CMAKE ---
+mkdir build && cd build
+cmake .. 
 make 
-./test1
+./RUN1
+
+--- TO RUN WITH MAKE ---
+cd src
+make 
+./RUN1
