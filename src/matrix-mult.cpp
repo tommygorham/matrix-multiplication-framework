@@ -25,13 +25,10 @@ int matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix
     {
       // compute C(i,j):
       float temp = 0.0;
-
       //cout << "Processing element:" << i << "," << j << endl;
-
       for (int k = 0; k < A.Cols(); ++k)
       {
         temp += A(i, k) * B(k, j);
-
         //cout << "k= " << k << "   A(i,j): " << A(i, j) << ", "
             // << "B(k,j): " << B(k, j) << ", " << temp << endl;
       }

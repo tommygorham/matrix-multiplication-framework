@@ -52,11 +52,9 @@ void init_dense_Matrix_diag(dense_Matrix<T> &DM, const T& c)
 
 int main(int argc, char **argv)
 {
-  constexpr int M = 100;
-  constexpr int N = 100; 
-  dense_Matrix<double> A(M, N), B(M, N), C(M, N);
+  dense_Matrix<double> A(10, 10), B(10, 10), C(10, 10);
   //dense_Matrix<double> AA(A.Rows(),A.Cols());
-
+  
   // fill in matrix A, B 
   init_dense_Matrix_const(A, 2.0);
   init_dense_Matrix_diag(B, 4.0); 

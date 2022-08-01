@@ -30,4 +30,4 @@ void dense_Matrix<T>::Resize(int Mprime, int Nprime)
 //
 // specific instantiation:
 //
-template class dense_Matrix<double>;
+//template class dense_Matrix<double>;
