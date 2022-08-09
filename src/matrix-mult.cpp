@@ -1,12 +1,9 @@
 #include "dense-matrix.h"
 #include "matrix-mult.h"
-//#include <iostream>
 
-//#define DEBUG
-
-// naive, ijk
+// naive, ijk: C := A * B
 template <typename T> 
-void matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B) // C := A * B
+void matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B) 
 {  
   for (int i = 0; i < C.Rows(); ++i) // row-wise
   {
@@ -14,16 +11,38 @@ void matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matri
     {
       // compute C(i,j):
       T temp = 0;
-      //  cout << "Processing element:" << i << "," << j << endl;
       for (int k = 0; k < A.Cols(); ++k)
       {
         temp += A(i, k) * B(k, j);    
-		//cout << "k= " << k << "   A(i,j): " << A(i, j) << ", "
-        //    << "B(k,j): " << B(k, j) << ", " << temp << endl;
       }
-      C(i, j) = temp; // fixed i,j
-//	  std::cout << "\nJust assigned C( " << i << ", " << j << " ): " << C(i,j); 
+      C(i, j) = temp; // assign at fixed position i,j
     }
+  }
+}
+
+// transpose B: C := A * B
+template <typename T> 
+void matrix_Mult2(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B, const int M, const int N)  
+{  
+  // transpose 
+  dense_Matrix<float> tmp(M,N);  
+  for (int i = 0; i < M; ++i) // row-wise
+  {
+    for (int j = 0; j < N; ++j) // col-wise
+    {
+      tmp(i,j) = B(j,i); // transpose B 
+	}
+  }
+  // multiply 
+  for (int i = 0; i < M; ++i)
+  {
+	  for(int j = 0; j < N; ++j) 
+	  { 
+		  for(int k = 0; k < N; ++k)
+		  { 
+			  C(i,j) += A(i,k) * tmp(j,k); 
+		  }
+      }
   }
 }
 
@@ -31,3 +50,4 @@ void matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matri
 // specific instantiation:
 //
  template void matrix_Mult(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B);// C := A * B
+ template void matrix_Mult2(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B, const int M, const int N);// C := A * B

@@ -4,9 +4,8 @@
 template <typename T>
 class dense_Matrix {
 private:
-  T* array;
   int M, N;
-
+  T* array;
 public:
 // defined in this file 
   // constructor
