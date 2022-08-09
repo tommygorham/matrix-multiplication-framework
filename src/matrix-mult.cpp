@@ -1,52 +1,53 @@
 #include "dense-matrix.h"
 #include "matrix-mult.h"
-#include <iostream>
 
-//#define DEBUG
-
-using namespace std;
-template <typename T>
-int matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B) // C := A * B
-{
-  // check for compatibility of A, B, and C:
-  if (C.Rows() != A.Rows() ||
-      C.Cols() != B.Cols() ||
-      A.Cols() != B.Rows())
+// naive, ijk: C := A * B
+template <typename T> 
+void matrix_Mult(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B) 
+{  
+  for (int i = 0; i < C.Rows(); ++i) // row-wise
   {
-    // print error message if we cannot do the multiplication
-    std::cout << "matrix_Mult(): Invalid dimensions " << std::endl;
-    return -1;
-  }
-
-  // do the multiplication:
-  for (int i = 0; i < C.Rows(); ++i)
-  {
-    for (int j = 0; j < C.Cols(); ++j)
+    for (int j = 0; j < C.Cols(); ++j) // col-wise
     {
       // compute C(i,j):
-      float temp = 0.0;
-
-      //cout << "Processing element:" << i << "," << j << endl;
-
+      T temp = 0;
       for (int k = 0; k < A.Cols(); ++k)
       {
-        temp += A(i, k) * B(k, j);
-
-        //cout << "k= " << k << "   A(i,j): " << A(i, j) << ", "
-            // << "B(k,j): " << B(k, j) << ", " << temp << endl;
+        temp += A(i, k) * B(k, j);    
       }
-
-      C(i, j) = temp;
-
-#ifdef DEBUG
-      cout << "Just assigned C(" << i << "," << j << ") = " << C(i, j) << endl;
-#endif
+      C(i, j) = temp; // assign at fixed position i,j
     }
   }
-  return 0; // no error
+}
+
+// transpose B: C := A * B
+template <typename T> 
+void matrix_Mult2(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B, const int M, const int N)  
+{  
+  // transpose 
+  dense_Matrix<float> tmp(M,N);  
+  for (int i = 0; i < M; ++i) // row-wise
+  {
+    for (int j = 0; j < N; ++j) // col-wise
+    {
+      tmp(i,j) = B(j,i); // transpose B 
+	}
+  }
+  // multiply 
+  for (int i = 0; i < M; ++i)
+  {
+	  for(int j = 0; j < N; ++j) 
+	  { 
+		  for(int k = 0; k < N; ++k)
+		  { 
+			  C(i,j) += A(i,k) * tmp(j,k); 
+		  }
+      }
+  }
 }
 
 //
 // specific instantiation:
 //
-template int matrix_Mult(dense_Matrix<double> &C, const dense_Matrix<double> &A, const dense_Matrix<double> &B);// C := A * B
+ template void matrix_Mult(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B);// C := A * B
+ template void matrix_Mult2(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B, const int M, const int N);// C := A * B

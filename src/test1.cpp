@@ -1,82 +1,73 @@
-#include <iostream>
-#include "dense-matrix.h"
-#include "matrix-mult.h"
+// program name: test1.cpp 
+// description:  To measure memory access time of a heap allocated 2D 
+// matrix in general matrix multiplication (C=A*B),  where the matrix 
+// is defined via a pointer to 1D data. This data is  stored row-major 
+// for optimal CPU execution, and the templated matrix class uses 
+// explicit instantiation for float values 
 
-using namespace std;
+#include <iostream>        // cout, endl
+using std::cout; 
+using std::endl; 
+#include <chrono>          // high_resolution_timer
+#include <typeinfo>        // typeid for DEBUG 
+#include <type_traits>     // static_assert 
+#include <random>          // std::mt19937
+#include <cassert>         // assert() 
+#include "dense-matrix.h"  // martix definition
+#include "matrix-mult.h"   // traditional approach 
+#include "verify-types.h"  // ensure T * T 
+#include "verify-dims.h"   // per matrix mult definition  
+#include "timer.h"         // scope-based chrono high_resolution_timer
+// #include "readtype.h"      // decltype() 
 
-template <typename T> 
-void print_dense_Matrix(const dense_Matrix<T> &A)
-{
-  for (int i = 0; i < A.Rows(); ++i)
-  {
-    for (int j = 0; j < A.Cols(); ++j)
-    {
-      std::cout << A(i, j) << " ";
-    }
-    std::cout << ("\n");
-  }
-  std::cout << ("\n"); // white space
-}
-template <typename T> 
-void init_dense_Matrix_const(dense_Matrix<T> &A, const T& c)
-{
-  for (int i = 0; i < A.Rows(); ++i)
-  {
-    for (int j = 0; j < A.Cols(); ++j)
-    {
-      A(i, j) = c;
-      std::cout << A(i, j) << " ";
-    }
-    std::cout << ("\n");
-  }
-  std::cout << ("\n"); // white space
-}
+const int M = 3; // rows  
+const int N = 3; // cols 
+
+// #pragma pack(1) // no padding 
 
 int main(int argc, char **argv)
 {
-  dense_Matrix<double> A(100, 100), B(100, 100), C(100, 100);
-  dense_Matrix<double> AA(A.Rows(),A.Cols());
+	// input 
+    using val_type = float; 
+	std::mt19937 gen(0); // seed with 0 to produce same random matrix  
+	std::uniform_real_distribution<val_type> dist(1.0f,2.0f); 
+	dense_Matrix<val_type> A(M, N), B(M, N), C(M, N);
+    for(auto& v : A) v = dist(gen); // fill A with random floats   
+    for(auto& y : B) y = dist(gen); // fill B with random floats  
 
-  // fill in matrix A
-  std::cout << "Matrix A: " << ("\n"); // for readability 
-  init_dense_Matrix_const(A, 2.0);
-  std::cout << ("\n"); // white space
+#ifdef DEBUG 
+   	B.init_diag(2.0f); // to easily confirm accuracy of multiplication              
+	// validate input 
+	int valid_types = verify_Types(A,B); 
+	int valid_dims  = verify_Dims(C,A,B); 
+	assert(valid_dims == 0 && valid_types == 0); // 0 means no error here 
+	cout << "\nsizeof(A): " <<  sizeof(A) << endl;
+	cout << "\nsizeof(&A): " <<  sizeof(&A) << endl; // ptr + int + int, int defaults to 8 b/c of padding 
+	cout << "\ntype(A): " <<  typeid(A).name() << endl; 
+	cout << "\ntype(&A): " <<  typeid(&A).name() << endl; 
+    // cout << "\nreadtype(A): " <<  type_name<decltype(A)>() << endl; 
+	cout << "\n&A: " <<  &A << endl;   
+	cout << "\n&A(0,0): " <<  &A(0,0) << "  " << A(0,0) << endl; 
+	cout << "\n&A(0,1): " <<  &A(0,1) << "  " << A(0,1) << endl; 
+	cout << "\n&A(1,0): " <<  &A(1,0) << "  " << A(1,0) << endl; 
+	cout << "\n&A(2,0): " <<  &A(2,0) << "  " << A(2,0) << endl; 
+	cout << "\n\nAlignment of matrix A: " << alignof(A) << endl; 
+#endif 
 
-  // fill in matrix B
-  std::cout << "Matrix B: " << ("\n"); // for readability
-  for (int i = 0; i < B.Rows(); ++i)
-  {
-    for (int j = 0; j < B.Cols(); ++j)
-    {
-      if(i == j)
-         B(i, j) = 3;
-      else
-	 B(i, j) = 0.;
-
-      std::cout << B(i, j) << " ";
+    // compute 
+	{ 
+        TommysLib::Timer timer; // scope-based timer
+        matrix_Mult(C, A, B);   // multiply C = A*B 
     }
-    std::cout << ("\n");
-  }
-
-  int code = matrix_Mult(C, A, B);
-
-std::cout << "the return code was " << code << std::endl;
-//int code = matrix_Mult(C, A, Bprime);
-  // print C out (how?)
-std::cout << ("\n"); 
-std::cout << "Matrix C: " << ("\n"); // for readability
- for (int i = 0; i < C.Rows(); ++i)
-  {
-    for (int j = 0; j < C.Cols(); ++j)
-    {
-      std::cout << C(i,j) << " ";
-    }
-    std::cout << ("\n");
-  }
-
-  //
-  AA = A; // calls AA.operator=(A);
-
-  // delete D;
-  return 0;
+ 
+    // validate compute by printing result, NOTE: this is safe for large 
+	// matrices, as maximum values to print is capped at 25  
+    cout << "\nMatrix A: " << ("\n"); // for readability
+    A.Print(); 
+    cout << "\nMatrix B: " << ("\n"); // for readability
+    B.Print(); 
+    cout << "\nMatrix C: " << ("\n"); // for readability
+    C.Print(); // result
+   
+ return 0;
 }
