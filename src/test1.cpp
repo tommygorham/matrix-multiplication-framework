@@ -18,30 +18,46 @@ using std::endl;
 #include "verify-types.h"  // ensure T * T 
 #include "verify-dims.h"   // per matrix mult definition  
 #include "timer.h"         // scope-based chrono high_resolution_timer
+#include "writecsv.h" 
+#include "terminal.h" 
+
 // #include "readtype.h"      // decltype() 
 
-const int M = 3; // rows  
-const int N = 3; // cols 
+const int M = 100; // rows  
+const int N = 100; // cols 
 
 // #pragma pack(1) // no padding 
 
+#define DEFAULT_INPUT "./test1" 
+#define ACCESSMETHOD  "heap allocated *[i*N+j]" 
+
 int main(int argc, char **argv)
 {
-	// input 
+    // setup 
     using val_type = float; 
-	std::mt19937 gen(0); // seed with 0 to produce same random matrix  
+    std::string_view vt = typeid(val_type).name(); // store the datatype of the matrix for results
+    
+    // input 
+    std::mt19937 gen(0); // seed with 0 to produce same random matrix  
 	std::uniform_real_distribution<val_type> dist(1.0f,2.0f); 
 	dense_Matrix<val_type> A(M, N), B(M, N), C(M, N);
     for(auto& v : A) v = dist(gen); // fill A with random floats   
     for(auto& y : B) y = dist(gen); // fill B with random floats  
-
-#ifdef DEBUG 
-   	B.init_diag(2.0f); // to easily confirm accuracy of multiplication              
+    
 	// validate input 
 	int valid_types = verify_Types(A,B); 
 	int valid_dims  = verify_Dims(C,A,B); 
-	assert(valid_dims == 0 && valid_types == 0); // 0 means no error here 
-	cout << "\nsizeof(A): " <<  sizeof(A) << endl;
+    assert(valid_dims == 0 && valid_types == 0); // 0 means no error here 
+
+    // compute 
+	{ 
+        TommysLib::Timer timer; // scope-based timer
+        matrix_Mult(C, A, B);   // multiply C = A*B 
+    }
+    
+#ifdef DEBUG 
+   	B.init_diag(2.0f); // to easily confirm accuracy of multiplication              
+    cout << "\nsizeof(A): " <<  sizeof(A) << endl;
 	cout << "\nsizeof(&A): " <<  sizeof(&A) << endl; // ptr + int + int, int defaults to 8 b/c of padding 
 	cout << "\ntype(A): " <<  typeid(A).name() << endl; 
 	cout << "\ntype(&A): " <<  typeid(&A).name() << endl; 
@@ -54,11 +70,18 @@ int main(int argc, char **argv)
 	cout << "\n\nAlignment of matrix A: " << alignof(A) << endl; 
 #endif 
 
-    // compute 
-	{ 
-        TommysLib::Timer timer; // scope-based timer
-        matrix_Mult(C, A, B);   // multiply C = A*B 
-    }
+    // prepare profiling results   
+	std::size_t bytes =  sizeof(A); 
+    std::string_view declaration = type_name<decltype(A)>(); 
+	std::string_view am = ACCESSMETHOD; 
+    
+    // write profiling results 
+    writeToTerminal(declaration, vt,  bytes, elements, , am);   
+   
+//  if (argc == 2)  {
+  //std::string file_path(argv[1]);
+//  writeToCSV(file_path, filename, vt, size, bytes, init, am); 
+   /}   
  
     // validate compute by printing result, NOTE: this is safe for large 
 	// matrices, as maximum values to print is capped at 25  
