@@ -20,8 +20,7 @@ using std::endl;
 #include "timer.h"         // scope-based chrono high_resolution_timer
 #include "writecsv.h" 
 #include "terminal.h" 
-
-// #include "readtype.h"      // decltype() 
+#include "readtype.h"      // decltype() 
 
 const int M = 100; // rows  
 const int N = 100; // cols 
@@ -51,7 +50,7 @@ int main(int argc, char **argv)
 
     // compute 
 	{ 
-        TommysLib::Timer timer; // scope-based timer
+        TommysLib::Timer timer; // scope-based timer, chrono::high_res_clock
         matrix_Mult(C, A, B);   // multiply C = A*B 
     }
     
@@ -76,12 +75,12 @@ int main(int argc, char **argv)
 	std::string_view am = ACCESSMETHOD; 
     
     // write profiling results 
-    writeToTerminal(declaration, vt,  bytes, elements, , am);   
+   // writeToTerminal(declaration, vt,  bytes, elements, , am);   
    
 //  if (argc == 2)  {
   //std::string file_path(argv[1]);
 //  writeToCSV(file_path, filename, vt, size, bytes, init, am); 
-   /}   
+  //}   
  
     // validate compute by printing result, NOTE: this is safe for large 
 	// matrices, as maximum values to print is capped at 25  

@@ -22,13 +22,13 @@ dense_Matrix<T> &dense_Matrix<T>::operator=(const dense_Matrix<T> &rhs) // don't
 template <typename T> 
 void dense_Matrix<T>::Resize(int Mprime, int Nprime)
 {
-  if(M*N != Mprime*Nprime)
+  if(m_rows*m_cols != Mprime*Nprime)
   {
     delete[] array;
     array = new T[Mprime*Nprime];
   }
-  M = Mprime;
-  N = Nprime;
+  m_rows = Mprime;
+  m_cols = Nprime;
 
 }
 
