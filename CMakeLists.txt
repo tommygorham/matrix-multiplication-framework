@@ -6,10 +6,8 @@ set(CMAKE_CXX_FLAGS "-Wall -std=c++2a ")
 
 add_executable(run-test1.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
 
-#add_executable(run-test2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/test2_transpose.cpp) 
+#add_executable(run-test1-O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
 
-#add_executable(run-test1.exe src/dense-matrix.cpp src/matrix-mult.cpp src/test2_readmat.cpp) 
-### TODO 
-#add_executable(pygemm_monotonic.exe src/pygemm.py) 
-#add_executable(pygemm_perfcounter.exe src/pygemm2.py) 
+add_executable(run-test2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2_transpose.cpp)
 
+#add_executable(run-test2-O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2_transpose.cpp)
