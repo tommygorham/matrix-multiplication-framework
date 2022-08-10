@@ -26,8 +26,8 @@ using std::endl;
 #include "timer.h"         // scope-based chrono high_resolution_timer
 // #include "readtype.h"      // decltype() 
 
-const int M = 3; // rows  
-const int N = 3; // cols 
+const int M = 1024; // rows  
+const int N = 1024; // cols 
 
 // #pragma pack(1) // no padding 
 
