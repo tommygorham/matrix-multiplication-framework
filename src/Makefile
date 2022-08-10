@@ -17,7 +17,7 @@ verify-dims.o:  verify-dims.cpp $(INCLUDE)/verify-dims.h $(INCLUDE)/dense-matrix
 matrix-mult.o:  matrix-mult.cpp  $(INCLUDE)/matrix-mult.h $(INCLUDE)/dense-matrix.h
 	$(CPP) -I $(INCLUDE) -c matrix-mult.cpp
 
-test1: test1.cpp $(INCLUDE)/dense-matrix.h $(INCLUDE)/verify-dims.h $(INCLUDE)/verify-types.h $(INCLUDE)/matrix-mult.h $(OBJS)
+test1: test1.cpp $(INCLUDE)/dense-matrix.h $(INCLUDE)/verify-dims.h $(INCLUDE)/verify-types.h $(INCLUDE)/matrix-mult.h $(INCLUDE)/readtype.h $(OBJS)
 	$(CPP) -v -I ../include -c test1.cpp 
 	$(CPP) -v -o test1 test1.o $(OBJS)
 
