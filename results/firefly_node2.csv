@@ -1,4 +1,4 @@
-Filename,Valuetype,Problem Size,Bytes,Allocation-time,Access Method
+Filename,Valuetype,Problem Size,Bytes,Multiplication Time,Access Method
 ./test1,f,1048576,4194328,14306.7949500,heap allocated 1D RowMajor
 ./test1,f,1048576,4194328,14357.0703460,heap allocated 1D RowMajor
 ./test1,f,1048576,4194328,14261.3147350,heap allocated 1D RowMajor
