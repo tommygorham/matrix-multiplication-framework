@@ -14,7 +14,6 @@ using std::endl;
 #include <cassert>         // assert() 
 #include <string>          // for read/write output  
 #include <string_view>     // C++17 read-only output 
-// #include <fstream>          
 #include "dense-matrix.h"  // martix definition
 #include "matrix-mult.h"   // traditional approach 
 #include "verify-types.h"  // ensure T * T 

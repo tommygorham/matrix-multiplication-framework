@@ -34,7 +34,7 @@ const int N = 1024; // cols
 
 // #pragma pack(1) // no padding 
 
-#define DEFAULT_INPUT "./test1" 
+#define DEFAULT_INPUT "./test2" 
 #define ACCESSMETHOD  "heap allocated 1D RowMajor" 
 
 int main(int argc, char **argv)
