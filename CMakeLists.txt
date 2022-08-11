@@ -2,12 +2,13 @@ cmake_minimum_required(VERSION 3.16)
 
 project(matrix-multiplication-framework) 
 include_directories(include) 
-set(CMAKE_CXX_FLAGS "-Wall -std=c++2a ") 
+set(CMAKE_CXX_FLAGS "-Wall -std=c++2a -O2 ") 
 
-add_executable(run-test1.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
+### TEST 1: BASELINE for naive (serial ijk) and transpose ###
+#add_executable(serial_naive_noopt.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
+#add_executable(serial_transpose_noopt.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2.cpp) 
 
-#add_executable(run-test1-O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
-
-add_executable(run-test2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2_transpose.cpp)
-
-#add_executable(run-test2-O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2_transpose.cpp)
+# NOTE: if -O2 enabled via end of line 5 above 
+add_executable(serial_naive_O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test1.cpp) 
+add_executable(serial_transpose_O2.exe src/verify-dims.cpp src/verify-types.cpp src/dense-matrix.cpp src/matrix-mult.cpp src/terminal.cpp src/writecsv.cpp src/test2.cpp) 
+### END TEST 1 ###

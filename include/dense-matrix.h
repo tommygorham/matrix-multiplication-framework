@@ -1,4 +1,4 @@
-#ifndef _DENSE_MATRIX_H
+#ifndef _DENSE_MATRIX_H // leading underscore to avoid naming conflicts 
 #define _DENSE_MATRIX_H
 
 // heap-allocated matrix stored as 1D Row-Major i*N+j 
