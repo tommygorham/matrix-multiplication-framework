@@ -1,9 +1,15 @@
-// program name: test1.cpp 
-// description:  To measure memory access time of a heap allocated 2D 
-// matrix in general matrix multiplication (C=A*B),  where the matrix 
-// is defined via a pointer to 1D data. This data is  stored row-major 
-// for optimal CPU execution, and the templated matrix class uses 
-// explicit instantiation for float values 
+// program name:  test2_transpose.cpp 
+// description:   to measure memory access time of a heap allocated 2D matrix 
+//                in general matrix multiplication (C=A*B),  where the matrix 
+//                is defined via a pointer to 1D data. This data is stored in 
+//                row-major order for optimal CPU execution, and the templated
+//                matrix class uses  explicit instantiation for float values. 
+//
+// significance:  though dense_Matrix A is accessed sequentially in test1.cpp,
+//                the inner loop advances the row number of B. Therefore, 
+//                "transposing" B before computing enables both matrices to be
+//                accessed sequentially, and avoids expensive non-sequential 
+//                accesses per column
 #include <iostream>        // cout, endl
 using std::cout; 
 using std::endl; 
@@ -14,7 +20,6 @@ using std::endl;
 #include <cassert>         // assert() 
 #include <string>          // for read/write output  
 #include <string_view>     // C++17 read-only output 
-// #include <fstream>          
 #include "dense-matrix.h"  // martix definition
 #include "matrix-mult.h"   // traditional approach 
 #include "verify-types.h"  // ensure T * T 
@@ -50,17 +55,18 @@ int main(int argc, char **argv)
 	int valid_dims  = verify_Dims(C,A,B); 
     assert(valid_dims == 0 && valid_types == 0); // 0 means no error here 
 
-    /* compute with scope-based timer 
+    /*  compute with scope-based timer 
     //	{ to use scope based TommysLib::Timer timer; 
     //    scope-based timer, chrono::high_res_clock
     //    matrix_Mult(C, A, B);   // multiply C = A*B 
     //  }
     */ 
-   // or make timer directly compute 
-   auto st = std::chrono::high_resolution_clock::now(); 
-   matrix_Mult(C, A, B);   // multiply C = A*B 
-   auto et = std::chrono::high_resolution_clock::now(); 
-   std::chrono::duration<double, std::milli> mm_time = et - st; 
+    
+    // or make timer directly compute 
+    auto st = std::chrono::high_resolution_clock::now(); 
+    matrix_Mult2(C, A, B, M, N);   // multiply C = A*B 
+    auto et = std::chrono::high_resolution_clock::now(); 
+    std::chrono::duration<double, std::milli> mm_time = et - st; 
 
 #ifdef DEBUG 
    	B.init_diag(2.0f); // to easily confirm accuracy of multiplication              
@@ -98,5 +104,5 @@ int main(int argc, char **argv)
     cout << "\nMatrix C: " << ("\n"); // for readability
     C.Print(); // result
     
- return 0;
+    return 0;
 }
