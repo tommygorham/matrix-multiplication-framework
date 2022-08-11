@@ -1,20 +1,8 @@
 # matrix-multiplication-framework
 Framework for building high-performance matrix-multiplication codes with C++. 
 
---- TO RUN WITH CMAKE ---
-
+# Directions 
+### Until more handling is added for cross-platform tests, the preferred way to build this is with CMake and GCC on Linux 
 mkdir build && cd build
-
-cmake .. 
-
+cmake .. -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc 
 make 
-
-./RUN1
-
---- TO RUN WITH MAKE ---
-
-cd src
-
-make 
-
-./RUN1
