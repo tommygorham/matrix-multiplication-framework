@@ -1,5 +1,6 @@
 #!usr/bin/env python3 
-import time        # monotonic() 
+# this program measures execution time with perfcounter as opposed to monotonic() in pygemm.py
+from time import perf_counter # this seems to be the most similar to c++ chrono high_resolution_clock()  
 import numpy as np # np.random.randn()
 
 N = 2048 # square dims
@@ -12,13 +13,13 @@ if __name__ == "__main__":
   
   # print continuously to simultaneously check core usage  
   for i in range(50):
-   start = time.monotonic()
+   start = perf_counter()
    C = A @ B 
-   end = time.monotonic()
+   end = perf_counter
    t = end - start  
    print(f"\n{flop/t * 1e-9:.2f} GFLOP/S") 
   
-  print(f"\ntime monotonic: {t}") 
+  print(f"\ntime in ms using perfcounter: {t}") 
   
   if(N<25): 
    print(f"\nMatrix A\n {A}\nMatrixB\n{B}\nResult\n{C}") 
