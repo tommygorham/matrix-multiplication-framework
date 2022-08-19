@@ -12,10 +12,10 @@ if __name__ == "__main__":
   flop = N*N*2*N # output is N^2, 2N compute each (multiply and add) 
   
   # print continuously to simultaneously check core usage  
-  for i in range(50):
+  for i in range(20):
    start = perf_counter()
    C = A @ B 
-   end = perf_counter
+   end = perf_counter()
    t = end - start  
    print(f"\n{flop/t * 1e-9:.2f} GFLOP/S") 
   
