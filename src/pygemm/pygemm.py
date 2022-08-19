@@ -11,7 +11,7 @@ if __name__ == "__main__":
   flop = N*N*2*N # output is N^2, 2N compute each (multiply and add) 
   
   # print continuously to simultaneously check core usage  
-  for i in range(50):
+  for i in range(20):
    start = time.monotonic()
    C = A @ B 
    end = time.monotonic()
