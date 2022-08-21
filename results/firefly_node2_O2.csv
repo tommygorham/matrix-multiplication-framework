@@ -1,7 +1,0 @@
-Filename,Valuetype,Problem Size,Bytes,Multiplication Time ms,Access Method
-./test1,f,1048576,4194328,3121.94,heap allocated 1D RowMajor
-./test1,f,1048576,4194328,3356.25,heap allocated 1D RowMajor
-./test1,f,1048576,4194328,3347.88,heap allocated 1D RowMajor
-./test2,f,1048576,4194328,1187.31,heap allocated 1D RowMajor
-./test2,f,1048576,4194328,1189.49,heap allocated 1D RowMajor
-./test2,f,1048576,4194328,1183.46,heap allocated 1D RowMajor
