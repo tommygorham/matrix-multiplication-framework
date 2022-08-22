@@ -25,7 +25,7 @@ template <typename T>
 void matrix_Mult2(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matrix<T> &B, const int M, const int N)  
 {  
   // transpose 
-  dense_Matrix<float> tmp(M,N);  
+  dense_Matrix<T> tmp(M,N);  
   for (int i = 0; i < M; ++i) // row-wise
   {
     for (int j = 0; j < N; ++j) // col-wise
@@ -49,5 +49,5 @@ void matrix_Mult2(dense_Matrix<T> &C, const dense_Matrix<T> &A, const dense_Matr
 //
 // specific instantiation:
 //
- template void matrix_Mult(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B);// C := A * B
- template void matrix_Mult2(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B, const int M, const int N);// C := A * B
+// template void matrix_Mult(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B);// C := A * B
+// template void matrix_Mult2(dense_Matrix<float> &C, const dense_Matrix<float> &A, const dense_Matrix<float> &B, const int M, const int N);// C := A * B

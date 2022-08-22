@@ -1,10 +1,8 @@
 #include "dense-matrix.h"
-#include <iostream> 
-#include <iomanip> 
 
-// = operator 
+// copy constructor  
 template <typename T> 
-dense_Matrix<T> &dense_Matrix<T>::operator=(const dense_Matrix<T> &rhs) // don't allow it for now.
+dense_Matrix<T> &dense_Matrix<T>::operator=(const dense_Matrix<T> &rhs) .
 {
   Resize(rhs.Rows(),rhs.Cols());
 
@@ -33,6 +31,7 @@ void dense_Matrix<T>::Resize(int Mprime, int Nprime)
 }
 
 // print matrix 
+/*
 template <typename T> 
 void dense_Matrix<T>::Print(){
 	std::cout << (*this).Rows() << " Rows " << (*this).Cols() << " Columns\n"; 
@@ -55,16 +54,9 @@ void dense_Matrix<T>::Print(){
   		std::cout << ("\n"); 
 	}
 } 
+*/ 
 
-// init with specific value 
-template <typename T> 
-void dense_Matrix<T>::init_with_const_val(const T& fill){
-  for (int i = 0; i < (*this).Rows(); ++i){
-    for (int j = 0; j < (*this).Cols(); ++j){
-      (*this)(i, j) = fill;
-    }
-  }
-}
+
 
 // init where only non-zero values are on the diagonal 
 template <typename T> 
